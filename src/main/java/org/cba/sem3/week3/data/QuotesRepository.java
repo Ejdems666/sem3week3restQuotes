@@ -1,5 +1,6 @@
 package org.cba.sem3.week3.data;
 
+import org.cba.sem3.week3.exception.ExceptionFactory;
 import org.cba.sem3.week3.exception.QuoteNotFound;
 
 import java.util.ArrayList;
@@ -19,14 +20,13 @@ public class QuotesRepository {
         quotes.add(new Quote(3, "Behind every great man, is a woman rolling her eyes"));
     }
 
-    public static Quote getQuote(int id) {
+    public static Quote getQuote(int id) throws QuoteNotFound {
         for (Quote quote : quotes) {
             if (quote.getId() == id) {
                 return quote;
             }
         }
-//        throw new QuoteNotFound();
-        return null;
+        throw ExceptionFactory.createNotFound(id);
     }
 
     public static List<Quote> getAllQuotes() {
@@ -45,7 +45,7 @@ public class QuotesRepository {
                 return;
             }
         }
-        throw new QuoteNotFound(id);
+        throw ExceptionFactory.createNotFound(id);
     }
 
     public static Quote updateQuote(int id, Quote updatedQuote) throws QuoteNotFound {
@@ -55,7 +55,7 @@ public class QuotesRepository {
                 return quotes.get(i);
             }
         }
-        throw new QuoteNotFound(id);
+        throw ExceptionFactory.createNotFound(id);
     }
 
     public static Quote getRandomQuote() {

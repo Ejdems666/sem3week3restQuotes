@@ -1,10 +1,9 @@
 package org.cba.sem3.week3.resources;
 
-import org.cba.sem3.week3.converter.QuoteExceptionJsonConverter;
+import com.google.gson.JsonObject;
 import org.cba.sem3.week3.converter.QuoteJsonConverter;
 import org.cba.sem3.week3.data.Quote;
 import org.cba.sem3.week3.data.QuotesRepository;
-import org.cba.sem3.week3.exception.QuoteNotFound;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -54,23 +53,17 @@ public class QuoteResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String updateQuote(String json, @PathParam("id") int id) {
         Quote quote = QuoteJsonConverter.JsonToQuote(json);
-        try {
-            Quote updatedQuote = QuotesRepository.updateQuote(id, quote);
-            return QuoteJsonConverter.getJsonFromQuote(updatedQuote);
-        } catch (QuoteNotFound quoteNotFound) {
-            return QuoteExceptionJsonConverter.getJsonFromException(quoteNotFound);
-        }
+        Quote updatedQuote = QuotesRepository.updateQuote(id, quote);
+        return QuoteJsonConverter.getJsonFromQuote(updatedQuote);
     }
 
     @DELETE
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String deleteQuote(@PathParam("id") int id) {
-        try {
-            QuotesRepository.deleteQuote(id);
-            return "{\"success\":\"Quote with id "+id+" was deleted!\"}";
-        } catch (QuoteNotFound quoteNotFound) {
-            return QuoteExceptionJsonConverter.getJsonFromException(quoteNotFound);
-        }
+        QuotesRepository.deleteQuote(id);
+        JsonObject successMessage = new JsonObject();
+        successMessage.addProperty("success", "Quote with id " + id + " was deleted!");
+        return successMessage.toString();
     }
 }
