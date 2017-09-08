@@ -12,12 +12,14 @@ import java.util.Random;
  */
 public class QuotesRepository {
     private static List<Quote> quotes;
+    private static int lastId;
 
     static {
         quotes = new ArrayList<>();
         quotes.add(new Quote(1, "Friends are kisses blown to us by angels"));
         quotes.add(new Quote(2, "Do not take life too seriously. You will never get out of it alive"));
         quotes.add(new Quote(3, "Behind every great man, is a woman rolling her eyes"));
+        lastId = quotes.size();
     }
 
     public static Quote getQuote(int id) throws QuoteNotFound {
@@ -34,7 +36,7 @@ public class QuotesRepository {
     }
 
     public static void addQuote(Quote quote) {
-        quote.setId(quotes.size());
+        quote.setId(++lastId);
         quotes.add(quote);
     }
 
